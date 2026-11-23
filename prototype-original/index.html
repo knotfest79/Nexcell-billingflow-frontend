@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexcell BillingFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app" id="app">
+<aside class="sidebar" id="sidebar" aria-label="Primary">
+  <div class="brand"><div class="mark" data-i="flow"></div><div><b>Nexcell</b><span>BillingFlow</span></div></div>
+  <nav class="nav" id="nav"></nav>
+  <div class="account">
+    <a class="side-link" data-i="help"><span class="lbl">Help</span></a>
+    <a class="side-link" data-i="out" data-toast="Signed out (demo)"><span class="lbl">Sign out</span></a>
+    <div class="acct"><span class="avatar">NP</span><div><b>Nexcell Digital</b><div class="sm muted">Pragesh · Owner</div></div></div>
+  </div>
+</aside>
+<div class="main">
+<header class="topbar">
+  <button class="btn icon ghost menu-btn" id="menuBtn" aria-label="Open menu" data-i="menu"></button>
+  <button class="btn icon ghost hide-m" id="collapseBtn" aria-label="Collapse sidebar" data-i="panel"></button>
+  <div><h1 id="title">Dashboard</h1><div class="sm muted hide-m" id="subtitle">Overview of your billing activity.</div></div>
+  <span class="spacer"></span>
+  <button class="btn ghost" id="cmdBtn" aria-label="Search and commands" data-i="search"><span class="kbd hide-m">⌘K</span></button>
+  <div class="sync" id="sync" data-s="ok" role="status" title="Click to cycle demo states"><span class="dot"></span><span class="t">All changes synced</span></div>
+  <div class="dd"><button class="btn icon ghost" data-dd="notif" aria-label="Notifications" data-i="bell"></button>
+    <div class="menu" id="notif" hidden><button>2 invoices are overdue</button><button>Payment received – $650.00</button><button>Invoice email failed</button></div></div>
+  <div class="dd"><button class="btn primary" data-dd="create" aria-haspopup="true"><span data-i="plus"></span>Create</button>
+    <div class="menu" id="create" hidden><button data-go="new">New Invoice</button><button data-go="customers" data-modal="custModal">New Customer</button><button data-modal="payModal">Record Payment</button><button data-modal="svcModal">New Service</button></div></div>
+  <div class="dd"><button data-dd="user" aria-label="User menu"><span class="avatar">P</span></button>
+    <div class="menu" id="user" hidden><button data-go="settings">Business profile</button><button id="themeBtn">Toggle dark mode</button><button data-toast="Signed out (demo)">Sign out</button></div></div>
+</header>
+<main class="content" id="content">
+<div class="alert danger" id="conflictBar" hidden><div><b>Sync conflict</b><p class="sm">#830418-EST-WHM was edited on two devices. Review before syncing continues.</p></div><button class="btn" data-modal="conflictModal">Review</button></div>
+
+<!-- DASHBOARD -->
+<section class="page" id="p-dashboard">
+  <div class="page-head"><div><h1>Good morning, Pragesh</h1><p class="muted">Here’s what’s happening with your business today.</p></div><button class="btn primary" data-go="new"><span data-i="plus"></span>Create Invoice</button></div>
+  <div class="alert danger" id="mailAlert"><div><b>Invoice email failed</b><p class="sm">The invoice was saved successfully, but the email could not be sent.</p></div><div class="row"><button class="btn" data-toast="Retrying email…">Retry</button><button class="btn ghost" data-dismiss="mailAlert">Dismiss</button></div></div>
+  <div class="grid g4">
+    <div class="card stat"><div class="sm muted">Total Invoiced <span data-i="doc"></span></div><div class="big">$18,450.00</div><div class="sm up">+12.4% this month</div></div>
+    <div class="card stat"><div class="sm muted">Total Paid <span data-i="card"></span></div><div class="big">$15,760.00</div><div class="sm up">+8.1%</div></div>
+    <div class="card stat"><div class="sm muted">Outstanding <span data-i="clock"></span></div><div class="big">$2,690.00</div><div class="sm muted">4 invoices</div></div>
+    <div class="card stat"><div class="sm muted">Overdue <span data-i="bell"></span></div><div class="big" style="color:var(--danger)">$1,120.00</div><div class="sm muted">2 invoices</div></div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><div class="card-h"><h2>Cash Flow</h2><div class="legend"><span><i style="background:var(--text-secondary)"></i>Invoiced</span><span><i style="background:var(--accent)"></i>Paid</span></div><div class="tabs" data-tabs><button>7 Days</button><button class="on">30 Days</button><button>3 Months</button><button>12 Months</button></div></div>
+      <div class="card-b"><svg class="chart" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" aria-label="Cash flow chart"><g stroke="var(--border)"><path d="M0 40H600M0 100H600M0 160H600"/></g><path id="cfA" d="M0 150C60 120 90 140 150 100S250 90 300 80 420 110 470 60 560 50 600 40" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-dasharray="5 4"/><path id="cfB" d="M0 170C60 150 90 155 150 125S250 110 300 105 420 120 470 85 560 75 600 62V220H0Z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/></svg></div></div>
+    <div class="card"><div class="card-h"><h2>Needs Attention</h2></div>
+      <div class="list-row" data-go="invoices"><span class="ic d" data-i="bell"></span><div><b>2 overdue invoices</b><div class="sm muted">$1,120.00 awaiting payment</div></div><span data-i="chev"></span></div>
+      <div class="list-row" data-go="invoices"><span class="ic w" data-i="clock"></span><div><b>3 invoices due this week</b><div class="sm muted">Total $1,570.00</div></div><span data-i="chev"></span></div>
+      <div class="list-row" data-go="detail"><span class="ic d" data-i="mail"></span><div><b>1 failed invoice email</b><div class="sm muted">#830418-EST-WHM</div></div><span data-i="chev"></span></div>
+      <div class="list-row" data-go="reminders"><span class="ic" data-i="bell"></span><div><b>4 reminders ready to send</b><div class="sm muted">Review and send in one click</div></div><span data-i="chev"></span></div></div>
+  </div>
+  <div class="card mt"><div class="card-h"><h2>Recent Invoices</h2><button class="btn ghost" data-go="invoices">View all</button></div><div class="table-wrap"><table class="stack"><thead><tr><th>Invoice</th><th>Customer</th><th>Service</th><th>Date</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead><tbody id="recentBody"></tbody></table></div></div>
+</section>
+
+<!-- INVOICES -->
+<section class="page" id="p-invoices" hidden>
+  <div class="page-head"><div><h1>Invoices</h1><p class="muted">Create, track and manage customer invoices.</p></div><div class="row"><button class="btn" data-toast="Exported invoices.csv">Export</button><button class="btn primary" data-go="new"><span data-i="plus"></span>New Invoice</button></div></div>
+  <div class="card"><div class="toolbar"><input id="invSearch" type="search" placeholder="Search invoice, customer or service" aria-label="Search invoices">
+    <select id="invStatus" aria-label="Status"><option value="">Status</option><option>Paid</option><option>Unpaid</option><option>Overdue</option><option>Draft</option><option>Sent</option></select>
+    <select aria-label="Customer"><option>Customer</option></select><select aria-label="Date"><option>Date</option></select><select aria-label="Service"><option>Service</option></select></div>
+    <div class="table-wrap"><table class="stack"><thead><tr><th>Invoice Number</th><th>Customer</th><th>Service</th><th>Invoice Date</th><th>Due Date</th><th class="num">Amount</th><th>Payment</th><th>Status</th><th></th></tr></thead><tbody id="invBody"></tbody></table></div>
+    <div class="empty" id="invEmpty" hidden><h2>No invoices yet</h2><p>Create your first invoice and BillingFlow will keep everything organised.</p><button class="btn primary" data-go="new">Create Invoice</button></div>
+    <div class="pager"><span class="sm muted">Showing 1–8 of 8</span><div class="row"><button class="btn" disabled>Previous</button><button class="btn" disabled>Next</button></div></div></div>
+</section>
+
+<!-- NEW INVOICE -->
+<section class="page" id="p-new" hidden>
+  <div class="page-head"><div><h1>New Invoice</h1><p class="muted">Create and send a professional invoice.</p></div><div class="row sticky-act"><button class="btn" data-toast="Draft saved">Save Draft</button><button class="btn" data-toast="Preview opened (demo)">Preview</button><button class="btn primary" data-modal="reviewModal">Create Invoice</button></div></div>
+  <div class="invoice-layout"><div class="grid">
+    <div class="card"><div class="card-h"><h2>Customer</h2><button class="btn ghost" data-modal="custModal">+ Add New Customer</button></div><div class="card-b"><div class="field"><label for="cust">Search or select customer</label><select id="cust"><option>Eastern Sands Motel</option><option>No Drama Cleaning</option><option>Blu Ginger</option><option>Drever Automotive</option></select></div>
+      <div class="cust"><b>Eastern Sands Motel</b><div class="sm muted">1 Belerine Street, Geelong VIC 3220<br>easternsands1@gmail.com · 03 5221 5577</div><span class="badge" style="margin-top:6px">Business code: EST</span></div></div></div>
+    <div class="card"><div class="card-h"><h2>Invoice Details</h2></div><div class="card-b"><div class="form-grid">
+      <div class="field"><label for="invNo">Invoice Number</label><input id="invNo" value="#830418-EST-WHM" readonly><span class="sm muted">Generated automatically</span></div>
+      <div class="field"><label for="invDate">Invoice Date <span class="badge" id="todayBadge">Today</span></label><input id="invDate" type="date" value="2026-11-23"></div>
+      <div class="field"><label for="dueDate">Due Date</label><input id="dueDate" type="date" value="2026-11-30"></div>
+      <div class="field"><label for="svc">Service</label><select id="svc"><option>Website Hosting &amp; Maintenance</option></select></div>
+      <div class="field"><label for="svcCode">Service Code</label><input id="svcCode" value="WHM" readonly></div><div class="field"><label>Currency</label><select><option>AUD</option></select></div></div>
+      <div class="alert warn" id="backdate" hidden><b>Backdated invoice</b><p class="sm">This invoice date is earlier than today.</p><label class="row sm" style="margin:8px 0"><input type="checkbox" id="bdOk"> I understand and want to create a backdated invoice.</label><input placeholder="Reason for backdating" aria-label="Reason for backdating"></div></div></div>
+    <div class="card"><div class="card-h"><h2>Invoice Items</h2><button class="btn" id="addItem"><span data-i="plus"></span>Add Item</button></div><div class="table-wrap"><table class="items"><thead><tr><th>Description</th><th>Details</th><th>Qty</th><th>Rate</th><th class="num">Amount</th><th></th></tr></thead><tbody id="items"></tbody></table></div></div>
+    <div class="card"><div class="card-h"><h2>Payment Details</h2><button class="btn ghost" id="payToggle" aria-expanded="true">Hide</button></div><div class="card-b form-grid" id="payBody"><div><span class="sm muted">Bank Name</span><br><b>NAB</b></div><div><span class="sm muted">Account Name</span><br><b>Nexcell Digital</b></div><div><span class="sm muted">BSB</span><br><b>085-005</b></div><div><span class="sm muted">Account Number</span><br><b class="masked">••••••500</b></div></div></div>
+    <div class="card"><div class="card-h"><h2>Totals</h2></div><div class="card-b"><div class="total-row"><span class="muted">Subtotal</span><span class="num" id="tSub">$556.00</span></div><div class="total-row"><span class="muted">Discount</span><span class="num">$0.00</span></div><div class="total-row"><span class="muted">GST</span><span class="num">$0.00</span></div><div class="total-row strong"><span>Total</span><span class="num" id="tTot">$556.00</span></div><div class="total-row"><span class="muted">Amount Paid</span><span class="num">$0.00</span></div><div class="total-row strong" style="color:var(--accent)"><span>Balance Due</span><span class="num" id="tBal">$556.00</span></div><p class="sm muted" style="margin-top:12px">Billing works offline. Changes sync when you’re back online.</p></div></div><div class="card"><div class="card-b form-grid"><div class="field"><label for="cn">Customer Notes</label><textarea id="cn" rows="3" placeholder="Appears on the invoice"></textarea></div><div class="field"><label for="in">Internal Notes</label><textarea id="in" rows="3" placeholder="Private – never shown to the customer"></textarea></div></div></div>
+  </div>
+  <aside class="card prev-card" aria-label="Live invoice preview"><div class="card-h"><h2>Live preview</h2><span class="badge">Updates as you type</span></div><div class="card-b"><div class="paper" id="paper"></div></div></aside></div>
+</section>
+
+<!-- INVOICE DETAIL -->
+<section class="page" id="p-detail" hidden>
+  <div class="page-head"><div><div class="row"><h1>#830418-EST-WHM</h1><span class="pill Unpaid">Unpaid</span></div><p class="muted">Eastern Sands Motel · Website Hosting &amp; Maintenance</p></div>
+    <div class="row"><button class="btn" data-toast="Opening PDF">View PDF</button><button class="btn" data-toast="Downloaded">Download</button><button class="btn" data-toast="Invoice emailed">Email Invoice</button><button class="btn" data-toast="Reminder sent">Send Reminder</button><button class="btn primary" data-modal="payModal">Record Payment</button>
+      <div class="dd"><button class="btn" data-dd="more">More</button><div class="menu" id="more" hidden><button data-toast="Receipt created">Create Receipt</button><button data-go="edit">Edit Invoice</button></div></div></div></div>
+  <div class="grid g2"><div class="grid"><div class="card"><div class="card-b kv"><div><span>Total</span><b class="big">$556.00</b></div><div><span>Balance</span><b class="big">$556.00</b></div><div><span>Invoice Date</span><b>03 Aug 2026</b></div><div><span>Due Date</span><b>04 Aug 2026</b></div></div></div>
+    <div class="alert warn"><b>Existing invoices are protected.</b><p class="sm">Edits are saved as new revisions so the original is always preserved.</p></div><div class="card"><div class="card-h"><h2>Revision history</h2><span class="badge" id="revCount"></span></div><div class="card-b"><ul class="timeline" id="revList"></ul></div></div></div>
+    <div class="card"><div class="card-h"><h2>Activity</h2></div><div class="card-b"><ul class="timeline"><li><b>Invoice created</b><div class="sm muted">03 Aug 2026</div></li><li><b>Invoice emailed</b><div class="sm muted">03 Aug 2026</div></li><li><b>Reminder sent</b><div class="sm muted">10 Aug 2026</div></li><li class="pending"><b>Payment pending</b></li></ul></div></div></div>
+</section>
+
+<section class="page" id="p-services" hidden>
+  <div class="page-head"><div><h1>Services</h1><p class="muted">Each service code becomes part of the invoice number. Different codes are separate invoices.</p></div><button class="btn primary" data-modal="svcModal"><span data-i="plus"></span>New Service</button></div>
+  <div class="card"><div class="table-wrap"><table class="stack"><thead><tr><th>Service</th><th>Code</th><th class="num">Default rate</th><th>Billing</th><th class="num">Invoices</th><th>Status</th></tr></thead><tbody id="svcBody"></tbody></table></div></div>
+</section>
+<section class="page" id="p-edit" hidden>
+  <div class="page-head"><div><div class="row"><h1>Edit #830418-EST-WHM</h1><span class="badge" id="revNext"></span></div><p class="muted">Changes are saved as a new revision. The original invoice is preserved.</p></div><div class="row sticky-act"><button class="btn" data-go="detail">Cancel</button><button class="btn primary" id="saveRev">Save as revision</button></div></div>
+  <div class="invoice-layout"><div class="grid">
+    <div class="card"><div class="card-h"><h2>Locked details</h2><span class="pill Draft">Locked</span></div><div class="card-b form-grid"><div class="field"><label>Invoice Number</label><input value="#830418-EST-WHM" readonly></div><div class="field"><label>Customer</label><input value="Eastern Sands Motel" readonly></div><div class="field"><label>Invoice Date</label><input value="03 Aug 2026" readonly></div><div class="field"><label>Service Code</label><input value="WHM" readonly></div></div></div>
+    <div class="card"><div class="card-h"><h2>Editable details</h2></div><div class="card-b form-grid"><div class="field"><label for="eDue">Due Date</label><input id="eDue" type="date" value="2026-08-04"></div><div class="field"><label for="eRate">Hosting &amp; maintenance rate</label><input id="eRate" type="number" step="0.01" value="300"></div><div class="field" style="grid-column:1/-1"><label for="eNote">Customer note</label><textarea id="eNote" rows="2"></textarea></div><div class="field" style="grid-column:1/-1"><label for="eReason">Reason for revision (required)</label><input id="eReason" placeholder="e.g. Rate corrected after quote change"></div></div></div>
+  </div><aside class="card prev-card"><div class="card-h"><h2>Changes in this revision</h2></div><div class="card-b" id="diff"></div></aside></div>
+</section>
+<!-- CUSTOMERS -->
+<section class="page" id="p-customers" hidden>
+  <div class="page-head"><div><h1>Customers</h1><p class="muted">People and businesses you bill.</p></div><button class="btn primary" data-modal="custModal"><span data-i="plus"></span>New Customer</button></div>
+  <div class="card"><div class="toolbar"><input type="search" placeholder="Search customers" aria-label="Search customers"></div><div class="table-wrap"><table class="stack"><thead><tr><th>Customer</th><th>Business Code</th><th>Email</th><th>Phone</th><th class="num">Total Invoiced</th><th class="num">Outstanding</th><th>Last Invoice</th><th>Status</th></tr></thead><tbody id="custBody"></tbody></table></div></div>
+</section>
+
+<!-- PAYMENTS / RECEIPTS -->
+<section class="page" id="p-payments" hidden>
+  <div class="page-head"><div><h1>Payments</h1><p class="muted">Money received against invoices.</p></div><button class="btn primary" data-modal="payModal"><span data-i="plus"></span>Record Payment</button></div>
+  <div class="card"><div class="table-wrap"><table class="stack"><thead><tr><th>Payment</th><th>Invoice</th><th>Customer</th><th>Payment Date</th><th class="num">Amount</th><th>Method</th><th>Reference</th><th>Status</th></tr></thead><tbody id="payBodyT"></tbody></table></div></div>
+</section>
+<section class="page" id="p-receipts" hidden>
+  <div class="page-head"><div><h1>Receipts</h1><p class="muted">Proof of payment for your customers.</p></div></div>
+  <div class="card"><div class="table-wrap"><table class="stack"><thead><tr><th>Receipt</th><th>Original Invoice</th><th>Customer</th><th>Date</th><th class="num">Amount</th><th>Payment Method</th><th></th></tr></thead><tbody id="rcBody"></tbody></table></div></div>
+</section>
+
+<!-- REMINDERS -->
+<section class="page" id="p-reminders" hidden>
+  <div class="page-head"><div><h1>Reminders</h1><p class="muted">Chase late payments without the awkwardness.</p></div></div>
+  <div class="grid g4"><div class="card stat"><div class="sm muted">Due Soon</div><div class="big">3</div></div><div class="card stat"><div class="sm muted">Overdue</div><div class="big">2</div></div><div class="card stat"><div class="sm muted">Reminder Sent</div><div class="big">5</div></div><div class="card stat"><div class="sm muted">Escalated</div><div class="big">1</div></div></div>
+  <div class="grid g2 mt"><div class="card"><div class="list-row"><span class="ic d" data-i="bell"></span><div><b>Eastern Sands Motel</b> <span class="muted">#830418-EST-WHM</span><div class="sm muted">$556 outstanding · 12 days overdue</div></div><button class="btn" data-go="detail">View</button><button class="btn primary" data-toast="Reminder sent">Send Reminder</button></div></div>
+    <div class="card"><div class="card-h"><h2>Automatic reminders</h2></div><div class="card-b"><div class="srow">First reminder after 7 days<label class="toggle"><input type="checkbox" checked aria-label="First reminder"><i></i></label></div><div class="srow">Second reminder after 14 days<label class="toggle"><input type="checkbox" checked aria-label="Second reminder"><i></i></label></div><div class="srow">Final reminder after 30 days<label class="toggle"><input type="checkbox" aria-label="Final reminder"><i></i></label></div></div></div></div>
+</section>
+
+<!-- TAX -->
+<section class="page" id="p-tax" hidden>
+  <div class="page-head"><div><h1>Tax &amp; Records</h1><p class="muted">Keep clean records for your accountant.</p></div><div class="tabs" data-tabs><button class="on">This Month</button><button>Quarter</button><button>Financial Year</button><button>Custom</button></div></div>
+  <div class="grid g4"><div class="card stat"><div class="sm muted">Business Revenue</div><div class="big">$15,760.00</div></div><div class="card stat"><div class="sm muted">Tax Reserved</div><div class="big">$1,576.00</div></div><div class="card stat"><div class="sm muted">Business Expenses</div><div class="big">$3,210.00</div></div><div class="card stat"><div class="sm muted">Net Business Income</div><div class="big">$10,974.00</div></div></div>
+  <div class="row mt"><button class="btn primary" data-toast="Accountant records exported">Export Accountant Records</button><button class="btn" data-toast="Excel exported">Export Excel</button><button class="btn" data-toast="CSV exported">Export CSV</button><button class="btn" data-toast="Summary downloaded">Download Summary</button></div>
+  <p class="sm muted mt">BillingFlow assists with billing and business records. Tax treatment should be reviewed according to your business circumstances and accountant advice.</p>
+</section>
+
+<!-- REPORTS -->
+<section class="page" id="p-reports" hidden>
+  <div class="page-head"><div><h1>Reports</h1><p class="muted">Understand where your revenue comes from.</p></div></div>
+  <div class="grid g2"><div class="card"><div class="card-h"><h2>Revenue</h2></div><div class="card-b"><svg class="chart" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" aria-label="Revenue bars"><g fill="var(--accent)" id="revBars"></g></svg></div></div>
+    <div class="card"><div class="card-h"><h2>Invoice Ageing</h2></div><div class="card-b" id="ageing"></div></div></div>
+  <div class="grid g3 mt"><div class="card"><div class="card-h"><h2>Top Customers</h2></div><div class="card-b" id="topCust"></div></div><div class="card"><div class="card-h"><h2>Service Revenue</h2></div><div class="card-b" id="svcRev"></div></div><div class="card"><div class="card-h"><h2>Outstanding</h2></div><div class="card-b"><div class="big">$2,690.00</div><p class="sm muted">across 4 invoices</p></div></div></div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="p-settings" hidden>
+  <div class="page-head"><div><h1>Settings</h1><p class="muted">Manage your business and preferences.</p></div></div>
+  <div class="settings"><div class="snav" id="snav"></div><div class="card"><div class="card-h"><h2 id="sTitle">Business Profile</h2></div><div class="card-b" id="sBody"></div></div></div>
+</section>
+</main></div></div>
+
+<!-- MODALS -->
+<div class="overlay" id="reviewModal" hidden role="dialog" aria-modal="true" aria-labelledby="rt"><div class="modal"><div class="card-h"><h2 id="rt">Review Invoice</h2></div><div class="card-b">
+  <div class="kv" style="grid-template-columns:1fr 1fr"><div><span>Invoice</span><b>#830418-EST-WHM</b></div><div><span>Customer</span><b>Eastern Sands Motel</b></div><div><span>Service</span><b>Website Hosting &amp; Maintenance</b></div><div><span>Total</span><b>$556.00</b></div><div><span>Invoice Date</span><b>23 Nov 2026</b></div><div><span>Due Date</span><b>30 Nov 2026</b></div></div>
+  <div><div class="check">✓ Invoice number available</div><div class="check">✓ Customer email available</div><div class="check">✓ Invoice date is current</div><div class="check">✓ Payment information configured</div></div></div>
+  <div class="modal-f"><button class="btn" data-close>Back</button><button class="btn primary" data-close data-toast="Invoice created successfully" data-go="detail">Create Invoice</button></div></div></div>
+<div class="overlay" id="payModal" hidden role="dialog" aria-modal="true" aria-labelledby="pt"><div class="modal"><div class="card-h"><h2 id="pt">Record Payment</h2></div><div class="card-b">
+  <div class="field"><label for="pi">Invoice</label><select id="pi"><option>#830418-EST-WHM</option><option>#830421-NDC-WDD</option></select></div>
+  <div class="form-grid"><div class="field"><label>Amount Due</label><input value="$556.00" readonly></div><div class="field"><label for="pa">Amount Paid</label><input id="pa" value="556.00"></div></div>
+  <div class="form-grid"><div class="field"><label for="pd">Payment Date</label><input id="pd" type="date" value="2026-11-23"></div><div class="field"><label for="pm">Payment Method</label><select id="pm"><option>Bank Transfer</option><option>Cash</option><option>Card</option><option>Other</option></select></div></div>
+  <div class="field"><label for="pr">Reference</label><input id="pr"></div></div>
+  <div class="modal-f"><button class="btn" data-close>Cancel</button><button class="btn primary" data-close data-toast="Payment recorded">Record Payment</button></div></div></div>
+<div class="overlay" id="custModal" hidden role="dialog" aria-modal="true" aria-labelledby="ct"><div class="modal"><div class="card-h"><h2 id="ct">New Customer</h2></div><div class="card-b"><div class="field"><label for="cName">Business name</label><input id="cName"></div><div class="form-grid"><div class="field"><label for="cCode">Business code</label><input id="cCode" maxlength="4"></div><div class="field"><label for="cPhone">Phone</label><input id="cPhone"></div></div><div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email"></div><div class="field"><label for="cAddr">Address</label><input id="cAddr"></div></div><div class="modal-f"><button class="btn" data-close>Cancel</button><button class="btn primary" id="saveCust">Create customer</button></div></div></div>
+<div class="overlay" id="svcModal" hidden role="dialog" aria-modal="true" aria-labelledby="st"><div class="modal"><div class="card-h"><h2 id="st">New Service</h2></div><div class="card-b"><div class="field"><label for="sName">Service name</label><input id="sName"></div><div class="form-grid"><div class="field"><label for="sCode">Service code</label><input id="sCode" maxlength="4"></div><div class="field"><label for="sRate">Default rate (AUD)</label><input id="sRate" type="number" step="0.01"></div></div><div class="field"><label for="sBill">Billing</label><select id="sBill"><option>Project</option><option>Annual</option><option>Monthly</option><option>Hourly</option></select></div></div><div class="modal-f"><button class="btn" data-close>Cancel</button><button class="btn primary" id="saveSvc">Create service</button></div></div></div>
+<div class="overlay top" id="cmdk" hidden role="dialog" aria-modal="true" aria-label="Command palette"><div class="modal cmd"><input id="cmdIn" placeholder="Search invoices, customers, services or actions" aria-label="Search" autocomplete="off"><ul id="cmdList" role="listbox"></ul></div></div>
+<div class="overlay" id="conflictModal" hidden role="dialog" aria-modal="true" aria-labelledby="cft"><div class="modal wide"><div class="card-h"><h2 id="cft">Resolve sync conflict</h2></div><div class="card-b"><p class="sm muted">#830418-EST-WHM changed on two devices. Nothing is lost: choose what becomes current, or keep both as revisions.</p><div class="compare"><div><b>This device</b><div class="sm muted">Pragesh’s MacBook · 4:32 PM</div><div class="diff"><span class="muted">Due Date</span><b>11 Aug 2026</b></div><div class="diff"><span class="muted">Rate</span><b>$320.00</b></div></div><div><b>Cloud</b><div class="sm muted">Office PC · 4:41 PM</div><div class="diff"><span class="muted">Due Date</span><b>04 Aug 2026</b></div><div class="diff"><span class="muted">Note</span><b>Paid by cheque</b></div></div></div></div><div class="modal-f"><button class="btn" data-res="Kept this device’s version">Keep this device</button><button class="btn" data-res="Used the cloud version">Use cloud</button><button class="btn primary" data-res="Both versions saved as revisions">Keep both as revisions</button></div></div></div>
+<div class="slide" id="custPanel" hidden role="dialog" aria-label="Customer details"><div class="card-h"><h2 id="cpName"></h2><button class="btn icon ghost" data-close aria-label="Close" data-i="x"></button></div><div class="card-b" id="cpBody"></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="script.js"></script>
+</body>
+</html>
